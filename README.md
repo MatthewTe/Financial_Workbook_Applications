@@ -31,7 +31,7 @@ Each individual workbook project will be described as follows:
   * Data Loading to database and/or workbook
  
 ## List of Workbook ETL Packages in the Application: 
-* #### [Dividend ETF Comparison Workshops](
+* #### [Dividend ETF Comparison Workshops](https://github.com/MatthewTe/Financial_Workbook_Applications/blob/master/README.md#dividend-etf-comparison-workbook)
 
 ## Dividend ETF Comparison Workbook 
 * ### Dividend ETF Workbook Summary
