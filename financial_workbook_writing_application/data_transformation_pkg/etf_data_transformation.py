@@ -9,16 +9,20 @@ from financial_workbook_writing_application.raw_data_extraction_pkg\
 # Importing data management packages:
 import pandas as pd
 from collections import Counter
+import numpy as np
+
+# Importing data vizualization packages:
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 
-# TODO: CHANGE BOTH THE PACKAGE AND THE OBJECTS TO DIVIDEND STOCKS NOT JUST DIVIDEND ETFS.
 
-# Creating the class that stores the ETF data transformation:
-class dividend_etf(Security):
+# Creating the class that stores the asset data transformation:
+class dividend_asset(Security):
     """
     This object performs data analysis from data inhereted from
-    raw_data_extraction_pkg's Security object. It transforms data into the
-    dataframes necessary to evaluate an ETF's dividend performance and compare
+    raw_data_extraction_pkg's asset object. It transforms data into the
+    dataframes necessary to evaluate an asset's dividend performance and compare
      said peformance to other ETPs.
 
     Methods
@@ -28,6 +32,9 @@ class dividend_etf(Security):
 
     build_annual_div_yields()
         Returns a dataframe containing the historical annual dividend yield.
+
+    build_max_drawdown()
+        Returns a float that represents the largest reduction in divided yield.
     """
 
     def __init__(self, ticker):
@@ -36,27 +43,31 @@ class dividend_etf(Security):
         ----------
         ticker: str
             This is the ticker string that is used to initalize the parent
-            Security() object. It provides all the data necessary to perform
+            asset() object. It provides all the data necessary to perform
             futher analysis.
 
-            NOTE: This ticker MUST be of an Exchange Traded Fund (ETF). This
+            NOTE: This ticker MUST be of an Exchange Traded Fund (asset). This
             object was not designed for any other asset class.
 
         """
 
-        # Inherent parnet __init__ for web_based_financial_models Security():
+        # Inherent parnet __init__ for web_based_financial_models asset():
         super().__init__(ticker)
 
         # Quarterly and annual dividend yield:
         self.hist_div_yields = self.build_hist_div_yields()
         self.annual_div_yields = self.build_annual_div_yields()
 
-        # TODO: Add Dividend Histogram and other Div vol plots.
+
+        # Dividend Data Analysis:
+        self.max_drawdown = self.build_max_drawdown()
+        self.dividend_volatility = self.build_dividend_volatility()
+        # TODO: BUILD dividend_volatility method.
 
 
     def build_hist_div_yields(self):
-        '''Returns a dataframe containing the historical dividend yields of the ETF
-        based on the historical_prices dataframe inhereted by the parent Security
+        '''Returns a dataframe containing the historical dividend yields of the asset
+        based on the historical_prices dataframe inhereted by the parent asset
         object.
 
         Returns
@@ -79,10 +90,9 @@ class dividend_etf(Security):
 
         return hist_div_df
 
-
     def build_annual_div_yields(self):
-        '''Returns a dataframe containing the annual dividend yields of the ETF
-        based on the historical_prices dataframe inhereted by the parent Security
+        '''Returns a dataframe containing the annual dividend yields of the asset
+        based on the historical_prices dataframe inhereted by the parent asset
         object.
 
         Returns
@@ -119,8 +129,33 @@ class dividend_etf(Security):
         # Removing all unnecessary columns for final df return:
         annual_div_df = grouped_yield_df['% Yield']
 
+        # Renaming % Yield for comparison purposes in data viz/load package:
+        annual_div_df.rename(self.ticker, inplace=True)
+
         return annual_div_df
 
+    def build_max_drawdown(self):
+        '''Returns a float that represents the maximum decrease of dividend yield
+        in a single year. The data is provided by the build_annual_div_yields()
+        method and the data is parsed using the numpy data packag and is
+        represented as a positive float.
+
+        Returns
+        --------
+        max_drawdown : float
+            The float representing the maximum divided drawdown of the asset.
+        '''
+
+        # Calculating the diff between consecutive elements:
+        difference = np.diff(self.annual_div_yields)
+
+        # Formatting difference list:
+        difference_list = [round(x, 3) for x in difference] # rounding
+
+        # Selecting the lowest value of the list:
+        max_drawdown = min(difference_list) * -1 # represented as a positive float
+
+        return max_drawdown
 
 
 
@@ -128,6 +163,4 @@ class dividend_etf(Security):
 
 
 
-
-
-# Test = print(dividend_etf('XOM').annual_div_yields)
+Test = dividend_asset('SPYD')
