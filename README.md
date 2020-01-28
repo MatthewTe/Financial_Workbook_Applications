@@ -1,4 +1,4 @@
-# Finance Data Analysis Python to Workbook Application
+# Finance Data Analysis Workbook Application
 ## Summary
 The purpose of this application is to serve as a bundle of python scripts that- when executed perform ETL functions on the specified financial data. Special focus is placed on the “Loading” aspect of financial data pipelines, where, in addition to loading data to a database, the application uses transformed data to compile excel workbooks that summarize and present said financial data in a manner that is compliant with most standards for financial report formatting. 
 #### In summary, this application is intended to serve as a bridge between the flexible data transformation python scripts/packages and the accessibility, simplicity and industry popularity of excel.
@@ -13,7 +13,7 @@ The format/structure of the project is relatively basic and adheres to a common 
 |
 |--data_transformation_package
 |---__init__.py
-|---etf_data_transformation.py
+|---dividend_data_transformation.py
 |
 |--excel_data_loading_package
 |---__init__.py
