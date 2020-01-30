@@ -15,6 +15,10 @@ The format/structure of the project is relatively basic and adheres to a common 
 |---__init__.py
 |---dividend_data_transformation.py
 |
+|--statistical_data_validation_pkg
+|---__init__.py
+|---normality_testing.py
+|
 |--excel_data_loading_package
 |---__init__.py
 |---dividend_etf_workbook.py
@@ -23,6 +27,9 @@ The format/structure of the project is relatively basic and adheres to a common 
 |---web_based_financial_models.py
 |
 ```
+
+## Data Validation Package and its use
+
 Each individual workbook project will be described as follows:
 * Workbook Project name
   * Project Summary
