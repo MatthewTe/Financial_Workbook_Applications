@@ -6,6 +6,10 @@ sys.path.append('..')
 from financial_workbook_writing_application.raw_data_extraction_pkg\
 .web_based_financial_models import Security
 
+# Importing data validation objects from statistical_data_validation_pkg:
+from financial_workbook_writing_application.statistical_data_validation_pkg\
+.normality_testing import normality_validation
+
 # Importing data management packages:
 import pandas as pd
 from collections import Counter
@@ -157,8 +161,10 @@ class dividend_asset(Security):
 
         return max_drawdown
 
+    def build_dividend_volatility(self):
+        # TODO: ADD METHOD DOCUMENTATION
 
-
+        # Performing data validation before transformation:
 
 
 
