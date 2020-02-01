@@ -8,7 +8,7 @@ from financial_workbook_writing_application.raw_data_extraction_pkg\
 
 # Importing data validation objects from statistical_data_validation_pkg:
 from financial_workbook_writing_application.statistical_data_validation_pkg\
-.normality_testing import normality_validation
+.normality_testing import normality_validation as normality
 
 # Importing data management packages:
 import pandas as pd
@@ -66,7 +66,6 @@ class dividend_asset(Security):
         # Dividend Data Analysis:
         self.max_drawdown = self.build_max_drawdown()
         self.dividend_volatility = self.build_dividend_volatility()
-        # TODO: BUILD dividend_volatility method.
 
 
     def build_hist_div_yields(self):
@@ -139,32 +138,79 @@ class dividend_asset(Security):
         return annual_div_df
 
     def build_max_drawdown(self):
-        '''Returns a float that represents the maximum decrease of dividend yield
-        in a single year. The data is provided by the build_annual_div_yields()
-        method and the data is parsed using the numpy data packag and is
+        '''Returns a dictionary that contains both the maximum decrease of
+        dividend % yield in a single year and qualterly
+
+        The data is provided by the build_annual_div_yields() and hist_div_yields()
+        methods and the data is parsed using the numpy data packag and is
         represented as a positive float.
 
         Returns
         --------
-        max_drawdown : float
-            The float representing the maximum divided drawdown of the asset.
+        drawdown_dict : dictionary
+            The dictionary containing the maximum divided drawdowns annualy and
+            quarterly:
+
+            {max_quarterly_drawdown, max_annual_drawdown}
         '''
+
+        # Anual Drawdown:
 
         # Calculating the diff between consecutive elements:
         difference = np.diff(self.annual_div_yields)
-
         # Formatting difference list:
         difference_list = [round(x, 3) for x in difference] # rounding
-
         # Selecting the lowest value of the list:
-        max_drawdown = min(difference_list) * -1 # represented as a positive float
+        max_annual_drawdown = min(difference_list) * -1 # represented as a positive float
 
-        return max_drawdown
+
+        # Quarterly Drawdown:
+
+        # Calculating the diff between consecutive elements:
+        difference = np.diff(self.hist_div_yields['% Yield'])
+        # Formatting difference list:
+        difference_list = [round(x, 3) for x in difference] # rounding
+        # Selecting the lowest value of the list:
+        max_quarterly_drawdown = min(difference_list) * -1 # represented as a positive float
+
+
+        # Creating and returning drawdown_dict:
+        drawdown_dict = {'max_quarterly_drawdown': max_quarterly_drawdown,
+                        'max_annual_drawdown': max_annual_drawdown}
+
+        return drawdown_dict
 
     def build_dividend_volatility(self):
-        # TODO: ADD METHOD DOCUMENTATION
+        '''Method calculates and returns a dictionary describing the volatility
+        of the divided yield for the security such as:
+        - Standard Deviation
+        - % Yield
+        - Percent Change of % Yield
+
+        Returns
+        -------
+        volatility_dict : A dictionary containing all the dividend volatility
+        metrics:
+        {pct_yield: pct_yield, divided_std: divided_std, div_pct_change: div_pct_change}
+        '''
 
         # Performing data validation before transformation:
+        pct_yield = self.hist_div_yields['% Yield'] # Extracting series from df.
+        alpha = 0.05
+        normality(self.hist_div_yields['% Yield'], alpha)
+
+        # Generating standard deviation:
+        divided_std = pct_yield.std()
+
+        # Calculating the 'pct_change' of the % Yield column:
+        div_pct_change = pct_yield.pct_change()
+
+
+        # Creating and returning the dictionary that the method returns:
+        volatility_dict = {'pct_yield': pct_yield, 'divided_std': divided_std,
+        'div_pct_change': div_pct_change}
+
+        return volatility_dict
 
 
 

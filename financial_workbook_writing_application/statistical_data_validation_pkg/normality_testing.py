@@ -51,7 +51,7 @@ class normality_validation(object):
 
         """
         # Declaring instance variables:
-        self.data = input_data
+        self.data = input_data  # Converting df column to array
         self.alpha = alpha
 
         # Initalizing statistical normality tests:
@@ -69,14 +69,14 @@ class normality_validation(object):
 
         # Raises Warnings if data failes Gaussian Validation tests:
         if shapiro_wilk['Gaussian indicator'] != True:
-            warnings.warn('Data does not pass Shapiro-Wilk Test of Gaussian\
+            warnings.warn('Data does not pass Shapiro-Wilk Test of Gaussian \
 distribution- Data may not be normally distributed',
              Data_Validation_Warning)
         else:
             pass
 
         if kol_smirnov['Gaussian indicator'] != True:
-            warnings.warn('Data does not pass Kolmogorov-Smirnov Test of Gaussian\
+            warnings.warn('Data does not pass Kolmogorov-Smirnov Test of Gaussian \
 distribution- Data may not be normally distributed',
              Data_Validation_Warning)
 
@@ -94,7 +94,7 @@ distribution- Data may not be normally distributed',
         '''
 
         # Declaring the number of axis for subplots:
-        fig = plt.figure()
+        fig = plt.figure('Normality Test Summary for ' + self.data.name + ' Data ')
         # adding gridspec:
         gs = fig.add_gridspec(2, 2)
 
@@ -102,11 +102,11 @@ distribution- Data may not be normally distributed',
         ax1 = fig.add_subplot(gs[0,0])
         #ax1.set_title('Histogram')
         self.data.hist(grid=True, ax=ax1)
-        plt.title(list(self.data)[0] + ' Column Data Histogram ')
+        plt.title(self.data.name + ' Column Data Histogram ')
 
         # Creating a Q-Q plot as ax2:
         ax2 = fig.add_subplot(gs[0,1])
-        ax2.set_title(list(self.data)[0] + ' Column Data Q-Q Plot')
+        ax2.set_title(self.data.name + ' Column Data Q-Q Plot')
         sm.qqplot(self.data, scale=3,line='s', ax=ax2) # TODO:: Look into QQ, question accuracy
 
         # Adding summary_df table from __init__ method:
