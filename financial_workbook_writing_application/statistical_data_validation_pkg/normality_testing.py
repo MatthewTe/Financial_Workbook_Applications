@@ -37,7 +37,7 @@ class normality_validation(object):
     # NOTE: When adding normality tests, UPDATE AT EVERY STAGE
     """
 
-    def __init__(self, input_data, alpha):
+    def __init__(self, input_data, alpha, plot_indicator):
         """
         Parameters
         ----------
@@ -51,6 +51,7 @@ class normality_validation(object):
 
         """
         # Declaring instance variables:
+        self.plot_indicator = plot_indicator
         self.data = input_data  # Converting df column to array
         self.alpha = alpha
 
@@ -80,8 +81,12 @@ distribution- Data may not be normally distributed',
 distribution- Data may not be normally distributed',
              Data_Validation_Warning)
 
-        # Initalize the visual normality tests:
-        self.visual_tests()
+        # Initalize the visual normality test if the indicator = True:
+        if plot_indicator == True:
+            self.visual_tests()
+
+        else:
+            pass
 
     def visual_tests(self):
         '''Plots the visual normality tests for the dataframe. Prints all
