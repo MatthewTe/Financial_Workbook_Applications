@@ -242,6 +242,10 @@ class div_asset_comparison(object):
         The method returns a dataframe that aggregates all the percent changes
         in divided yields for each ticker.
 
+    max_annual_drawdown_aggregator()
+        The method returns a dictionary containing the max annual divided yield
+        drawdown, indexed by ticker name
+
     """
 
     def __init__(self, *tickers):
@@ -271,6 +275,7 @@ class div_asset_comparison(object):
         self.annual_div_yields = self.annual_div_yield_aggregator()
         self.ticker_std = self.std_aggregator()
         self.ticker_pct_change = self.pct_change_aggregator()
+        self.max_annual_drawdown = self.max_annual_drawdown_aggregator()
 
 
     def annual_div_yield_aggregator(self):
@@ -341,5 +346,27 @@ class div_asset_comparison(object):
 
         return agg_pct_change_df
 
+    def max_annual_drawdown_aggregator(self):
+        '''The method aggregates the maximum annual divided drawdown of each
+        divided asset in a dictionary, indexed by ticker symbol.
 
-# div_asset_comparison('WM', 'SPY', 'XOM')
+        Returns
+        -------
+        agg_div_drawdown_dict : dictionary
+            A dictionary containing the max annual yield drawdown of each asset
+            indexed by ticker symbol
+        '''
+
+        # Creating empty dict:
+        agg_div_drawdown_dict = {}
+
+        # Itterator that appends each drawdown data point to the dict:
+        for ticker in self.ticker_dict:
+            agg_div_drawdown_dict.update({ticker :
+             self.ticker_dict[ticker].max_drawdown['max_annual_drawdown']})
+
+    
+        return agg_div_drawdown_dict
+
+
+div_asset_comparison('WM', 'SPY', 'XOM')
