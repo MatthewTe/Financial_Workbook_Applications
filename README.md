@@ -47,7 +47,28 @@ The dividend ETF application is designed to perform data analysis and visualizat
 * Maximum Dividend Drawdowns
 * Dividend Volatility 
 * ### Data Extraction
+The raw financial data that is fed into the rest of the data pipeline is obtained via the [finance web scraping package](https://github.com/MatthewTe/ETL-and-Statistical-Model-Validation-Packages/tree/master/finance_web_scraping_package) that power most financial analysis. 
+
 * ### Data Transformation/Analysis 
+Data transformation for divided data takes place via two main objects in the dividend_data_transformation.py script:
+
+* dividend_asset()
+* div_asset_comparison()
+
+The web scraped data from the based finance models flows into these two objects and are transformed by various methods to produce the final data output that flows into the excel_data_loading package. Below is a diagram illustrating how dividend data flows through this transformation package:
+![Image Not Found](https://github.com/MatthewTe/Financial_Workbook_Applications/blob/master/resources/Dividend%20Workbook%20Data%20Transformation%20chart.png)
+
+Example of how to initialize the div_asset_comparison() object:
+```pyhton
+example = div_asset_comparison('WM, 'SPY', 'XOM')
+
+print(example.ticker_dict)
+print(example.annual_div_yields)
+print(example.ticker_std)
+print(example.ticker_pct_change)
+print(example.max_annual_drawdown)
+```
+
 * ### Data Loading
  
 
